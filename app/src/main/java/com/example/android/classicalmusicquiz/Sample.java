@@ -20,9 +20,12 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.JsonReader;
 import android.widget.Toast;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSourceInputStream;
@@ -62,12 +65,12 @@ class Sample {
      * @param sampleID The sample ID.
      * @return The portrait Bitmap.
      */
-    static Bitmap getComposerArtBySampleID(Context context, int sampleID){
+    static Drawable getComposerArtBySampleID(Context context, int sampleID){
         Sample sample = Sample.getSampleByID(context, sampleID);
         int albumArtID = context.getResources().getIdentifier(
                 sample != null ? sample.getAlbumArtID() : null, "drawable",
                 context.getPackageName());
-        return BitmapFactory.decodeResource(context.getResources(), albumArtID);
+        return ResourcesCompat.getDrawable(context.getResources(), albumArtID, null);
     }
 
     /**
@@ -182,7 +185,7 @@ class Sample {
         }
 
         String userAgent = Util.getUserAgent(context, "ClassicalMusicQuiz");
-        DataSource dataSource = new DefaultDataSource(context, null, userAgent, false);
+        DataSource dataSource = new DefaultDataSource(context, userAgent, false);
         DataSpec dataSpec = new DataSpec(Uri.parse(uri));
         InputStream inputStream = new DataSourceInputStream(dataSource, dataSpec);
 
